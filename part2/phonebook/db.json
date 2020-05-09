@@ -1,24 +1,14 @@
 {
-  "persons":[
-    { 
-      "name": "Arto Hellas", 
-      "number": "040-123456",
-      "id": 1
-    },
-    { 
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523",
+  "persons": [
+    {
+      "name": "nathan",
+      "number": "1239-uueo-17391",
       "id": 2
     },
-    { 
-      "name": "Dan Abramov", 
-      "number": "12-43-234345",
+    {
+      "name": "ada lovelace",
+      "number": "10-comp-sci",
       "id": 3
-    },
-    { 
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122",
-      "id": 4
     }
   ]
 }
