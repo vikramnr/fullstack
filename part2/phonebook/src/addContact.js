@@ -14,6 +14,11 @@ const AddContact = ({ newName, setPersons, setNewName, setNewNumber, newNumber, 
                 foundPerson = { ...foundPerson, number: newNumber }
                 personService.updatePerson(foundPerson, foundPerson.id).then(resPer => {
                     setPersons(persons.map(person => person.id !== foundPerson.id ? person : foundPerson));
+                }).catch(err => {
+                    setNotification(`${err.response.data.message}`)
+                    setTimeout(() => {
+                        setNotification(null);
+                    }, 1000);
                 })
             }
         }
@@ -27,6 +32,11 @@ const AddContact = ({ newName, setPersons, setNewName, setNewNumber, newNumber, 
             personService.create(newPerson).then(perResponse => {
                 setPersons(persons.concat(perResponse));
                 setNotification(`Added ${newPerson.name}`)
+                setTimeout(() => {
+                    setNotification(null);
+                }, 1000);
+            }).catch(err => {
+                setNotification(`${err.response.data.message}`)
                 setTimeout(() => {
                     setNotification(null);
                 }, 1000);
