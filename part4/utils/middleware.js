@@ -16,6 +16,7 @@ const errorHandler = (error,request,response,next) => {
 const getToken = (request,response,next) => {
     const token = request.get('authorization')
     if(token && token.toLowerCase().startsWith('bearer ') ){
+        
         request.token = token.substring(7)
     }
     next()

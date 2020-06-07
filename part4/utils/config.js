@@ -1,5 +1,5 @@
 require('dotenv').config()
-let PORT = process.env.PORT || 3000
+let PORT = process.env.PORT || 3001
 let URL = process.env.MONGO_URL
 
 if(process.env.NODE_ENV ==='test') {
