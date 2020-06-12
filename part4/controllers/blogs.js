@@ -48,7 +48,7 @@ blogRouter.put('/:id', async (request, response) => {
         'url': body.url,
         'likes': body.likes
     }
-
+    
     let updatedResponse = await Blog.findByIdAndUpdate(request.params.id, updatedPost, {
         new: true
     })
@@ -56,9 +56,7 @@ blogRouter.put('/:id', async (request, response) => {
 })
 
 blogRouter.delete('/:id',tokenExtractor ,async (request, response) => {
-
     const verifyToken = jwt.verify(request.token,process.env.SECERT)
-     
     if(!request.token || !verifyToken.id) {
         return response.status(401).json({error: 'invalid or token is missing'})
     }
@@ -69,7 +67,7 @@ blogRouter.delete('/:id',tokenExtractor ,async (request, response) => {
     if(verifyUser.toString()!== user.id.toString()) {
         return response.status(401).json({error: 'only created of post is allowed to delete'})
     }
-
+    console.log(request)
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
 })

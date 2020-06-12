@@ -3,20 +3,20 @@ import Blog from './components/Blog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
+import CreateBlog from './components/CreateBlog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-  const [title, setTitle] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs = blogs.sort((a, b) => b.likes - a.likes)
       setBlogs(blogs)
-    )
+    })
   }, [])
   useEffect(() => {
     const userJSON = window.localStorage.getItem('blog-user')
@@ -48,27 +48,10 @@ const App = () => {
       <h2>blogs</h2>
       <div>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handlePostUpdation={handlePostUpdation} handlePostDeletion={handlePostDeletion}  user={user}/>
         )}
       </div>
     </>
-  )
-
-  const createBlog = () => (
-    <form onSubmit={handlePostCreation}>
-      <h4>Create a new Blog post</h4>
-      <div>
-        Title <input type='text' value={title} onChange={({ target }) => setTitle(target.value)} ></input>
-      </div>
-      <div>
-        Url <input type='text' value={url} onChange={({ target }) => setUrl(target.value)}></input>
-      </div>
-      <div>
-        Author
-          <input type='text' value={author} onChange={({ target }) => setAuthor(target.value)}></input>
-      </div>
-      <input type="submit" value="Create post" />
-    </form>
   )
 
   const onLogin = async (e) => {
@@ -95,16 +78,7 @@ const App = () => {
     window.localStorage.removeItem('blog-user')
   }
 
-  const handlePostCreation = async (e) => {
-    e.preventDefault();
-    const newPost = {
-      title,
-      author,
-      url
-    }
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+  const handlePostCreation = async (newPost) => {
     try {
       const blogResponse = await blogService.create(newPost)
       setBlogs(blogs.concat(blogResponse))
@@ -121,14 +95,47 @@ const App = () => {
 
   }
 
+  const handlePostUpdation = async (updatedPost) => {
+
+    try {
+      await blogService.update(updatedPost)
+    } catch (error) {
+      console.log(error);
+      setErrorMessage('An error occured. Please try after sometime')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 1000);
+    }
+  }
+
+  const handlePostDeletion =  async (post) => {
+    try {
+      await blogService.remove(post)
+      setBlogs(blogs.filter(blog => blog.id!==post.id))
+      setErrorMessage('Blog is removed now')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 2000);
+    } catch (error) {
+      setErrorMessage('Only post creator can remove the post')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 1000);
+    }
+  }
+
   return (
     <div>
       <Notification message={errorMessage} />
       {user === null ? LoginForm() :
         <>
-          <button onClick={onLogout}>Logout</button>
+          <div>Logged in as {user.username}
+            <button onClick={onLogout}>Logout</button>
+          </div>
+          <Togglable buttonLabel={'Create a new post'}>
+            <CreateBlog handlePostCreation={handlePostCreation} />
+          </Togglable>
           {DispalyBlogs()}
-          {createBlog()}
         </>
       }
 
