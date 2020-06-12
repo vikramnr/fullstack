@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001/api/blogs'
 
-let token = null;
+let token = null
 
 const setToken = (usertoken) => {
   token = `bearer ${usertoken}`
@@ -32,7 +32,7 @@ const remove = async (post) => {
   const config = {
     headers: { Authorization: token }
   }
-  
+
   const response = await axios.delete(baseUrl+'/'+post.id, config)
   return response.data
 }

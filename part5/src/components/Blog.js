@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
   const blogStyle = {
     paddingTop: 10,
@@ -6,6 +7,12 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+  Blog.PropType = {
+    blog: PropTypes.object.isRequired,
+    handlePostDeletion: PropTypes.func.isRequired,
+    handlePostUpdation: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
   }
   const [visible, setVisible] = useState(false)
 
@@ -16,7 +23,7 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
     setVisible(!visible)
   }
 
-  const increaseLike = (e) => {
+  const increaseLike = () => {
     let updatedBlog = {
       likes: blog.likes += 1,
       ...blog
@@ -24,7 +31,7 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
     handlePostUpdation(updatedBlog)
   }
 
-  const removePost = (e) => {
+  const removePost = () => {
     if (window.confirm(`remove ${blog.title}`)) {
       handlePostDeletion(blog)
     }
@@ -41,12 +48,10 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
         <div>{blog.author}</div>
         <div>{blog.url}</div>
         <div>{blog.likes}<button onClick={increaseLike}>like</button></div>
-        <button onClick={toggleVisibility}>hide</button> 
+        <button onClick={toggleVisibility}>hide</button>
         { blog.user.user === user.user ?<button onClick={removePost} >remove</button> : <></>}
-        
       </div>
     </div>
   )
 }
-
 export default Blog

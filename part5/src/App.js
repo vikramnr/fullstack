@@ -67,13 +67,13 @@ const App = () => {
       setErrorMessage('Incorrect Username or password')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 1000);
+      }, 1000)
     }
 
 
 
   }
-  const onLogout = (e) => {
+  const onLogout = () => {
     setUser(null)
     window.localStorage.removeItem('blog-user')
   }
@@ -85,12 +85,12 @@ const App = () => {
       setErrorMessage('Blog is added now')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 2000);
+      }, 2000)
     } catch (error) {
       setErrorMessage('An error occured. Please try after sometime')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 1000);
+      }, 1000)
     }
 
   }
@@ -100,11 +100,11 @@ const App = () => {
     try {
       await blogService.update(updatedPost)
     } catch (error) {
-      console.log(error);
+      console.log(error)
       setErrorMessage('An error occured. Please try after sometime')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 1000);
+      }, 1000)
     }
   }
 
@@ -115,12 +115,12 @@ const App = () => {
       setErrorMessage('Blog is removed now')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 2000);
+      }, 2000)
     } catch (error) {
       setErrorMessage('Only post creator can remove the post')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 1000);
+      }, 1000)
     }
   }
 
