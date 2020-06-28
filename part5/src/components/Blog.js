@@ -38,12 +38,15 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
   }
 
   return (
-    <div style={blogStyle} key={blog.id}>
-      <strong style={hideWhenVisible}>
-        {blog.title}
+    <div style={blogStyle} key={blog.id} >
+      <div style={hideWhenVisible} className="divBlog">
+        <strong>
+          {blog.title}
+        </strong>
+        <div>{blog.author}</div>
         <button onClick={toggleVisibility}>view</button>
-      </strong>
-      <div style={showWhenVisible}>
+      </div>
+      <div style={showWhenVisible} className="hiddenBlog">
         {blog.title}
         <div>{blog.author}</div>
         <div>{blog.url}</div>

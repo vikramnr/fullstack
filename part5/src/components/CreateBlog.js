@@ -21,14 +21,14 @@ const CreateBlog = ({ handlePostCreation }) => {
     <form onSubmit={onCreatePost}>
       <h4>Create a new Blog post</h4>
       <div>
-                Title <input type='text' value={title} onChange={({ target }) => setTitle(target.value)} ></input>
+          Title <input id="title" type='text' value={title} onChange={({ target }) => setTitle(target.value)} ></input>
       </div>
       <div>
-                Url <input type='text' value={url} onChange={({ target }) => setUrl(target.value)}></input>
+          Url <input id="url" type='text' value={url} onChange={({ target }) => setUrl(target.value)}></input>
       </div>
       <div>
-                Author
-        <input type='text' value={author} onChange={({ target }) => setAuthor(target.value)}></input>
+         Author
+        <input id="author" type='text' value={author} onChange={({ target }) => setAuthor(target.value)}></input>
       </div>
       <input type="submit" value="Create post" />
     </form>
