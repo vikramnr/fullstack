@@ -30,7 +30,7 @@ const CreateBlog = ({ handlePostCreation }) => {
          Author
         <input id="author" type='text' value={author} onChange={({ target }) => setAuthor(target.value)}></input>
       </div>
-      <input type="submit" value="Create post" />
+      <input id='createblog' type="submit" value="Create post" />
     </form>
   )
 }

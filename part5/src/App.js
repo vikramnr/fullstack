@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 import Togglable from './components/Togglable'
 import CreateBlog from './components/CreateBlog'
+import DisplayBlogs from './components/DisplayBlogs'
+import Login from './components/Login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,47 +14,30 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
-  useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs = blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(blogs)
-    })
-  }, [])
-  useEffect(() => {
+
+  const checkToken = () => {
     const userJSON = window.localStorage.getItem('blog-user')
     if (userJSON) {
       const loggedUser = JSON.parse(userJSON)
       blogService.setToken(loggedUser.token)
       setUser(loggedUser)
     }
+  }
+
+  const getPosts = () => {
+    blogService.getAll().then((blogs) => {
+      blogs = blogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(blogs)
+    })
+  }
+
+  useEffect(() => {
+    getPosts()
   }, [])
 
-  const LoginForm = () => (
-    <>
-      <form onSubmit={onLogin}>
-        <div>
-          Username<input type="text" value={username} name='username'
-            onChange={({ target }) => setUsername(target.value)}></input>
-        </div>
-        <div>
-          Password<input type="password" value={password}
-            onChange={({ target }) => setPassword(target.value || '')}></input>
-        </div>
-        <button>submit</button>
-      </form>
-    </>
-  )
-
-  const DispalyBlogs = () => (
-    <>
-      <h2>blogs</h2>
-      <div>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handlePostUpdation={handlePostUpdation} handlePostDeletion={handlePostDeletion}  user={user}/>
-        )}
-      </div>
-    </>
-  )
+  useEffect(() => {
+    checkToken()
+  }, [])
 
   const onLogin = async (e) => {
     e.preventDefault()
@@ -67,11 +52,8 @@ const App = () => {
       setErrorMessage('Incorrect Username or password')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 1000)
+      }, 2000)
     }
-
-
-
   }
   const onLogout = () => {
     setUser(null)
@@ -80,8 +62,8 @@ const App = () => {
 
   const handlePostCreation = async (newPost) => {
     try {
-      const blogResponse = await blogService.create(newPost)
-      setBlogs(blogs.concat(blogResponse))
+      await blogService.create(newPost)
+      getPosts()
       setErrorMessage('Blog is added now')
       setTimeout(() => {
         setErrorMessage(null)
@@ -92,13 +74,12 @@ const App = () => {
         setErrorMessage(null)
       }, 1000)
     }
-
   }
 
   const handlePostUpdation = async (updatedPost) => {
-
     try {
       await blogService.update(updatedPost)
+      getPosts()
     } catch (error) {
       console.log(error)
       setErrorMessage('An error occured. Please try after sometime')
@@ -108,10 +89,10 @@ const App = () => {
     }
   }
 
-  const handlePostDeletion =  async (post) => {
+  const handlePostDeletion = async (post) => {
     try {
       await blogService.remove(post)
-      setBlogs(blogs.filter(blog => blog.id!==post.id))
+      getPosts()
       setErrorMessage('Blog is removed now')
       setTimeout(() => {
         setErrorMessage(null)
@@ -127,18 +108,32 @@ const App = () => {
   return (
     <div>
       <Notification message={errorMessage} />
-      {user === null ? LoginForm() :
+      {user === null ? (
+        <Login
+          username={username}
+          password={password}
+          setPassword={setPassword}
+          setUsername={setUsername}
+          onLogin={onLogin}
+        />
+      ) : (
         <>
-          <div>Logged in as {user.username}
+          <div>
+            Logged in as {user.username}
             <button onClick={onLogout}>Logout</button>
           </div>
           <Togglable buttonLabel={'Create a new post'}>
             <CreateBlog handlePostCreation={handlePostCreation} />
           </Togglable>
-          {DispalyBlogs()}
+          <DisplayBlogs
+            blogs={blogs}
+            handlePostDeletion={handlePostDeletion}
+            handlePostUpdation={handlePostUpdation}
+            user={user}
+            setBlogs={setBlogs}
+          />
         </>
-      }
-
+      )}
     </div>
   )
 }

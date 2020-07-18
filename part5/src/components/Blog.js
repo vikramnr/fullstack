@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+
 const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -28,6 +30,7 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
       likes: blog.likes += 1,
       ...blog
     }
+    blog= updatedBlog
     handlePostUpdation(updatedBlog)
   }
 
@@ -38,7 +41,7 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
   }
 
   return (
-    <div style={blogStyle} key={blog.id} >
+    <div style={blogStyle} key={blog.id} id={blog.title}>
       <div style={hideWhenVisible} className="divBlog">
         <strong>
           {blog.title}
@@ -50,7 +53,8 @@ const Blog = ({ blog, handlePostUpdation, handlePostDeletion,user }) => {
         {blog.title}
         <div>{blog.author}</div>
         <div>{blog.url}</div>
-        <div>{blog.likes}<button onClick={increaseLike}>like</button></div>
+        <div id='like'>{blog.likes}<button id='likeBtn' onClick={increaseLike}>like</button>
+        </div>
         <button onClick={toggleVisibility}>hide</button>
         { blog.user.user === user.user ?<button onClick={removePost} >remove</button> : <></>}
       </div>

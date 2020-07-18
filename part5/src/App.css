@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+error {
+  background-color: red;
+  border: 1px solid;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
