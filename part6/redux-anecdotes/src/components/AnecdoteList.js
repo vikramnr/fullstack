@@ -1,18 +1,26 @@
 import React from 'react'
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateVotes } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
+  const anecdotes = useSelector((state) => {
+    return state.filter
+      ? state.anecdotes.filter((anecdote) =>
+          anecdote.content.includes(state.filter)
+        )
+      : state.anecdotes
+  })
 
-    const anecdotes = useSelector(state => state)
-const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  const vote = (id) => {
-    dispatch(updateVotes(id))
+  const vote = (anecdote) => {
+    dispatch(updateVotes(anecdote.id))
+    dispatch(setNotification(`you have voted ${anecdote.content}`, 1000))
   }
   return (
     <div>
-    <h4>Lists</h4>
+      <h4>Lists</h4>
       {anecdotes
         .sort((a, b) => b.votes - a.votes)
         .map((anecdote) => (
@@ -20,7 +28,7 @@ const dispatch = useDispatch()
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => vote(anecdote.id)}>vote</button>
+              <button onClick={() => vote(anecdote)}>vote</button>
             </div>
           </div>
         ))}
