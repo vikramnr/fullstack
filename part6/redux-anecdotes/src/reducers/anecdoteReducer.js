@@ -14,6 +14,7 @@ const anecdoteReducer = (state = [], action) => {
     case 'ADD_QUOTE':
       return [...state, action.data]
     case 'INIT_QUOTES':
+      console.log(action.data)
       return action.data
     default:
       return state
@@ -30,6 +31,7 @@ export const createAnecdote = (content) => {
 export const initializeQuotes = () => {
   return async (dispatch) => {
     const anectodes = await anectodeService.getAll()
+    console.log('inis')
     dispatch({
       type: 'INIT_QUOTES',
       data: anectodes,

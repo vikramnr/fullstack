@@ -4,21 +4,21 @@ import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
 import Filter from './components/Filter'
 import { initializeQuotes } from './reducers/anecdoteReducer'
-import { useDispatch } from "react-redux";
-
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(initializeQuotes())
-  }, [dispatch])
+    // document.title = `You clicked times`
+  })
   return (
     <div>
-      <Notification/>
+      <Notification />
       <h2>Anecdotes</h2>
       <AnecdoteList />
       <AnecdoteForm />
-      <Filter/>
+      <Filter />
     </div>
   )
 }

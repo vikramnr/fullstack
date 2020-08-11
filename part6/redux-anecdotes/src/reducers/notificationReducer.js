@@ -1,4 +1,5 @@
 const message = 'Hello and Welcome to Anectodes'
+let timerId = null
 
 const notificationReducer = (state = message, action) => {
   switch (action.type) {
@@ -25,8 +26,11 @@ export const removeMessage = () => {
 }
 
 export const setNotification = (message, time) => {
+  if (timerId) {
+    clearTimeout(timerId)
+  }
   return async (dispatch) => {
-    setTimeout(() => {
+    timerId = setTimeout(() => {
       dispatch({
         type: 'SEND_MESSAGE',
         data: message,
