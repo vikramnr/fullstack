@@ -50,7 +50,7 @@ blogRouter.put('/:id', async (request, response) => {
     }
     
     let updatedResponse = await Blog.findByIdAndUpdate(request.params.id, updatedPost, {
-        new: true
+        new: false
     })
     response.status(200).json(updatedResponse.toJSON())
 })
