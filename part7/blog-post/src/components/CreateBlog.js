@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-import { useDispatch } from "react-redux";
-import { creatPost } from "../reducers/BlogReducer";
+import { useDispatch } from 'react-redux'
+import { creatPost } from '../reducers/BlogReducer'
+import {
+  // removeNotification,
+  createNotification,
+} from '../reducers/NotificationReducer'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
@@ -27,12 +32,13 @@ const CreateBlog = () => {
       title,
       author,
       url,
-      likes: 0
+      likes: 0,
     }
     setTitle('')
     setAuthor('')
     setUrl('')
     dispatch(creatPost(newPost))
+    dispatch(createNotification('post created sucessfully',1000))
   }
   return (
     <>
@@ -67,7 +73,9 @@ const CreateBlog = () => {
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
-          <Button size="small" type="submit" color="primary"> Create New
+          <Button size="small" type="submit" color="primary">
+            {' '}
+            Create New
           </Button>
         </div>
       </form>

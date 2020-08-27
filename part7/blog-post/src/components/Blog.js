@@ -12,6 +12,10 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { useDispatch } from 'react-redux'
 import { updatePost, deletePost } from '../reducers/BlogReducer'
+import {
+	//removeNotification,
+	createNotification,
+  } from '../reducers/NotificationReducer'
 
 const useStyles = makeStyles({
 	root: {
@@ -56,11 +60,14 @@ const Blog = ({ blog, user }) => {
 			...blog,
 		}
 		dispatch(updatePost(updatedBlog))
+		dispatch(createNotification(`you liked the ${blog.title}`,1000))
+		// dispatch(removeNotification())
 	}
 
 	const removePost = () => {
 		if (window.confirm(`remove ${blog.title}`)) {
 			dispatch(deletePost(blog))
+			dispatch(createNotification(`deleting ${blog.title}...`,1000))
 		}
 	}
 
