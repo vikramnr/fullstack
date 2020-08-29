@@ -1,6 +1,6 @@
 const NotificationReducer = (state = '', action) => {
-  console.log(action.data, 'from reducer')
-  console.log(state, 'from state')
+  // console.log(action.data, 'from reducer')
+  // console.log(state, 'from state')
   switch (action.type) {
     case 'SET_MESSAGE':
       return action.data
