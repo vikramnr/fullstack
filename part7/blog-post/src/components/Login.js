@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { logoutUser, loginUser } from '../reducers/UserReducer'
+import { logoutUser, loginUser } from '../reducers/LoginReducer'
+import { removeMessage, sendMessage } from '../reducers/NotificationReducer'
 
 const Login = () => {
   const user = useSelector((state) => state.user)
@@ -16,19 +17,24 @@ const Login = () => {
       console.log('calling login')
       setUsername('')
       setPassword('')
+      dispatch(sendMessage('Logged In sucessfully'))
+      dispatch(removeMessage(1000))
     } catch (error) {
       console.log(error)
+      dispatch(sendMessage(error.message))
+      dispatch(removeMessage(1000))
     }
   }
 
   const onLogout = () => {
     dispatch(logoutUser())
+    dispatch(sendMessage('Logged out sucessfully'))
+    dispatch(removeMessage(1000))
   }
 
   if (user && user.token) {
     return (
       <div>
-        Logged in as {user.username}
         <button onClick={onLogout}>Logout</button>
       </div>
     )

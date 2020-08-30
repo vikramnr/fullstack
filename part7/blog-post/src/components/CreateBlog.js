@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux'
 import { creatPost } from '../reducers/BlogReducer'
 import {
   // removeNotification,
-  createNotification,
+  sendMessage,
+  removeMessage
 } from '../reducers/NotificationReducer'
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +39,8 @@ const CreateBlog = () => {
     setAuthor('')
     setUrl('')
     dispatch(creatPost(newPost))
-    dispatch(createNotification('post created sucessfully',1000))
+    dispatch(sendMessage('post created sucessfully'))
+    dispatch(removeMessage(1000))
   }
   return (
     <>

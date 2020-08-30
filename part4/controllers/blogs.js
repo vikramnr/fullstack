@@ -40,6 +40,30 @@ blogRouter.post('/', tokenExtractor, async (request, response) => {
     response.status(201).json(savedPost.toJSON())
 })
 
+blogRouter.post('/:id/comments',tokenExtractor,async (request, response) => {
+    const body = request.body
+    const verifyToken = jwt.verify(request.token, process.env.SECERT)
+    
+    if (!request.token || !verifyToken.id) {
+        return response.status(400).json({
+            error: 'token is invalid or missing'
+        })
+    }
+    let updatedPost = {
+        'title': body.title,
+        'author': body.author,
+        'url': body.url,
+        'likes': body.likes,
+        'comments': body.comments
+    }
+    
+    let updatedResponse = await Blog.findByIdAndUpdate(request.params.id, updatedPost, {
+        new: false
+    })
+    response.status(200).json(updatedResponse.toJSON())
+
+})
+
 blogRouter.put('/:id', async (request, response) => {
     const body = request.body
     let updatedPost = {

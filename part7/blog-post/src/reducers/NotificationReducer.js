@@ -1,38 +1,37 @@
-const NotificationReducer = (state = '', action) => {
-  // console.log(action.data, 'from reducer')
-  // console.log(state, 'from state')
+const message = null
+let timerId = null
+
+const notificationReducer = (state = message, action) => {
+  console.log(state)
   switch (action.type) {
-    case 'SET_MESSAGE':
+    case 'SEND_MESSAGE':
       return action.data
     case 'REMOVE_MESSAGE':
-      return action.data
+      return null
     default:
       return state
   }
 }
 
-export const createNotification = (message, timer) => {
-  return async (dispatch) => {
-    await setTimeout(() => {
-        dispatch({
-            type: 'REMOVE_MESSAGE',
-            data:''
-        })
-    }, timer);
-    dispatch({ type: 'SET_MESSAGE', data: message })
+export const removeMessage = (time) => {
+  if (timerId) {
+    clearTimeout(timerId)
   }
-  //return {}
+  return async (dispatch) => {
+    timerId = setTimeout(() => {
+      dispatch({
+        type: 'REMOVE_MESSAGE',
+        data: null,
+      })
+    }, time)
+  }
 }
 
-// export const removeNotification = () => {
-//     console.log('called removed')
-//     return async (dispatch) =>{
-//         const timerId = await setTimeout(() => {}, 5000)
-//         dispatch({
-//             type: 'REMOVE_MESSAGE',
-//             data: ''
-//         })
-//     }
-// }
+export const sendMessage = (message) => {
+  return {
+    type: 'SEND_MESSAGE',
+    data: message,
+  }
+}
 
-export default NotificationReducer
+export default notificationReducer

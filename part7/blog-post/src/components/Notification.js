@@ -1,18 +1,11 @@
 import React from 'react'
-import MuiAlert from '@material-ui/lab/Alert'
-import { useSelector } from 'react-redux'
-import { removeNotification } from '../reducers/NotificationReducer'
+import { Alert } from '@material-ui/lab'
 
-const Notification = () => {
-  const message = useSelector(state => state.message)
-  console.log(message,'from the component')
 
-  function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-  }
-
-  if (message && message.length> 0) {
-    return <Alert severity="error">{message}</Alert>
+const Notification = ({ message }) => {
+  
+if (message && message.length > 0) {
+    return <Alert severity="success">{message}</Alert>
   }
   return <></>
 }

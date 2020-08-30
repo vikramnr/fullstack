@@ -17,6 +17,11 @@ const blogReducer = (state = [], action) => {
       let deleteId = action.data.id
       let updatedPosts = state.filter((post) => post.id !== deleteId)
       return [...updatedPosts]
+    case 'UPDATE_POST_COMMENTS':
+      let postId = action.data.id
+      let updatePostComment = state.find((post) => post.id === postId)
+      let allPostsComment = state.filter((post) => post.id !== postId)
+      return [...allPostsComment, updatePostComment]
     default:
       return state
   }
@@ -37,6 +42,17 @@ export const updatePost = (post) => {
     const updatedPost = await blogService.update(post)
     dispatch({
       type: 'UPDATE_POST',
+      data: updatedPost,
+    })
+  }
+}
+
+export const updatePostComments = (post) => {
+  return async (dispatch) => {
+    console.log(post)
+    const updatedPost = await blogService.updateComments(post)
+    dispatch({
+      type: 'UPDATE_POST_COMMENTS',
       data: updatedPost,
     })
   }

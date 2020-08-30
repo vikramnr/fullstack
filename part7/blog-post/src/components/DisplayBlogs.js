@@ -1,42 +1,40 @@
 import React from 'react'
-import Blog from './Blog'
-import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@material-ui/core'
 
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}))
-
-const DisplayBlogs = ({
-  user,
-}) => {
-  const blogs = useSelector(state => state.blogs)
-  
-  const classes = useStyles()
+const DisplayBlogs = () => {
+  const blogs = useSelector((state) => state.blogs)
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        {blogs.map((blog) => (
-          <Grid key={blog.id} item xs={3}>
-            <Blog
-              id="blog"
-              key={blog.id}
-              blog={blog}
-              user={user}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+    <Container>
+    <h2>
+      Posts
+    </h2>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {blogs.map((blog) => (
+              <TableRow key={blog.id}>
+                <TableCell>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </TableCell>
+                <TableCell>{blog.author}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   )
 }
 
