@@ -17,7 +17,6 @@ const loginReducer = (state={},action) => {
 export const loginUser = (username, password) => {
     return async (dispatch) => {
         const logedUser = await loginService.loginUser({username,password})
-        console.log(logedUser)
         blogService.setToken(logedUser.token)
         window.localStorage.setItem('blog-user', JSON.stringify(logedUser))
         dispatch({
@@ -32,7 +31,6 @@ export const checkUser = () => {
     if (userJSON) {
       const loggedUser = JSON.parse(userJSON)
       blogService.setToken(loggedUser.token)
-      console.log(loggedUser)
       return {
         type: 'INIT_USER',
         data: loggedUser

@@ -13,14 +13,11 @@ const Login = () => {
     e.preventDefault()
     try {
       dispatch(loginUser(username,password))
-      console.log(username)
-      console.log('calling login')
       setUsername('')
       setPassword('')
       dispatch(sendMessage('Logged In sucessfully'))
       dispatch(removeMessage(1000))
     } catch (error) {
-      console.log(error)
       dispatch(sendMessage(error.message))
       dispatch(removeMessage(1000))
     }

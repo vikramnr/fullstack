@@ -2,7 +2,7 @@ const message = null
 let timerId = null
 
 const notificationReducer = (state = message, action) => {
-  console.log(state)
+  
   switch (action.type) {
     case 'SEND_MESSAGE':
       return action.data

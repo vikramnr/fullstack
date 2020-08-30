@@ -3,12 +3,10 @@ import { useSelector } from 'react-redux'
 
 const User = ({ match }) => {
   const userData = useSelector((state) => state.userStats)
-  console.log(userData)
   const user = match
     ? userData.find((user) => user.id === match.params.id)
     : null
-  console.log(user)
-  console.log(match)
+  
   if (!user) {
     return <>Please refresh your browser by pressing F5 or hitting refresh button </>
   }
