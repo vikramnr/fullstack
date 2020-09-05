@@ -95,6 +95,7 @@ const typeDefs = gql`
   type Authors{
       name: String
       bookCount: Int
+      born: Float
   }
   type Mutation{
       addBook(
@@ -103,6 +104,10 @@ const typeDefs = gql`
         published: Float
         genres: [String]
     ) : Book
+      editAuthor(
+          name: String
+          setBornTo: Float
+      ) : Authors
   }
 
   type Query {
@@ -134,7 +139,7 @@ const resolvers = {
           let res= []
           authors.forEach(a => {
             bookCount = books.filter(b => b.author === a.name).length
-            res.push({name: a.name, bookCount})
+            res.push({name: a.name, bookCount, born: a.born})
           })
           return res
       }
@@ -143,15 +148,30 @@ const resolvers = {
   Mutation: {
       addBook: (root, args) =>{
         const book =  {...args, id: uuid()}
-        const name = book.author
-        authors.find(a => a.name = name) ? '' : authors.concat({
-            name,
-            year: null,
-            id: uuid()
-        })
+        const nameDoesExist = authors.findIndex(a => a.name === book.author) 
+        if(nameDoesExist === -1 ) {
+            authors =authors.concat({
+                name: book.author,
+                year: null,
+                id: uuid()
+            })
+        }
         books = books.concat(book)
         return book
-      }
+      },
+    editAuthor: (root, args) => {
+        const authorExist = authors.find(a => a.name === args.name) 
+        if(authorExist) {
+            let updatedAuthor = {
+                ...authorExist,
+                year: args.setBornTo
+            }
+            authors = authors.filter(a => a.name !== args.name)
+            authors = authors.concat(updatedAuthor)
+            return updatedAuthor
+        }
+        return null
+    }
   }
 }
 
