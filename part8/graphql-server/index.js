@@ -152,7 +152,7 @@ const resolvers = {
         if(nameDoesExist === -1 ) {
             authors =authors.concat({
                 name: book.author,
-                year: null,
+                born: null,
                 id: uuid()
             })
         }
@@ -164,7 +164,7 @@ const resolvers = {
         if(authorExist) {
             let updatedAuthor = {
                 ...authorExist,
-                year: args.setBornTo
+                born: args.setBornTo
             }
             authors = authors.filter(a => a.name !== args.name)
             authors = authors.concat(updatedAuthor)
