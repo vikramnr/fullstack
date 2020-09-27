@@ -43,6 +43,11 @@ const typeDefs = gql`
   type Token {
     value: String!
   }
+
+  type RecomendedBooks {
+    book: [Book]
+    genre: String
+  }
   
   type Mutation {
     addBook(
@@ -56,7 +61,7 @@ const typeDefs = gql`
       username: String!
       favoriteGenre: String!
     ): User
-    login(
+    loginUser(
       username: String!
       password: String!
     ): Token  
@@ -67,10 +72,7 @@ const typeDefs = gql`
     authorCount: Int
     allBooks(name: String, genre: String): [Book]
     allAuthors: [Author]
-    me: (root,args,context) => {
-      return context.currentUser
-    }
-
+    me: RecomendedBooks
   }
 `;
 
@@ -79,20 +81,7 @@ const resolvers = {
     bookCount: async () => await Book.countDocuments(),
     authorCount: async () => await Author.countDocuments(),
     allBooks: async (root, args) => {
-      // if (args.name) {
-      //   return books.filter((b) => b.author === args.name);
-      // }
-      // if (args.genre) {
-      //   return books.filter((b) => b.genres.includes(args.genre));
-      // }
-      // if (args.genre && args.name) {
-      //   return [
-      //     ...books.filter((b) => b.genres.includes(args.genre)),
-      //     books.filter((b) => b.author === args.name),
-      //   ];
-      // }
       let books = await Book.find({}).populate("author");
-      console.log(books);
       return books;
     },
     allAuthors: async () => {
@@ -104,15 +93,19 @@ const resolvers = {
       });
       return authors;
     },
-  },
+    me: async (root,args,context) => {
+      let books=  await Book.find({ genres: context.currentUser.favoriteGenre  })
+      console.log(books)
+      return  {book: books,genre:context.currentUser.favoriteGenre }
+  }
+},
   Mutation: {
     addBook: async (root, args, {currentUser}) => {
-      const book = new Book({ ...args });
-
+      let book = new Book({ ...args });
       if(!currentUser) {
         throw new UserInputError('not authenticated')
       }
-      const author = await Author.findOne({ name: args.author });
+      let author = await Author.findOne({ name: args.author });
       
       if (!author) {
         let newAuthor = new Author({ name: args.author });
@@ -123,10 +116,10 @@ const resolvers = {
       }
       try {
         book = await book.save();
-        let resbook = await Book.find(book._id).populate("author");
+        let resbook = await Book.findById(book._id).populate("author");
         return resbook;
       } catch (err) {
-          throw new UserInputError('Please check the',err) 
+        throw new UserInputError('Please check the',err) 
       }
       
     },
@@ -163,18 +156,19 @@ const resolvers = {
       return {value: jwt.sign(userToken, JWT_SECRET)}
     }
   },
-};
+}
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async({req}) => {
     const auth = req ? req.headers.authorization : null
-    if(!auth && auth.toLowerCase().startsWith('bearer ')) {
+    if(auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
+      const currentUser = await User.findById(decodedToken.id)
+    return { currentUser }
     }
-    const currentUser = await User.findById(decodedToken.id)
-    return currentUser
+    
   }
 });
 

@@ -5,6 +5,8 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries";
 
 const Authors = ({ show }) => {
   const result = useQuery(ALL_AUTHORS);
+  const [selectedOption, setSelectedOption] = useState();
+  const [year, setYear] = useState("");
   const options = []
   
   useEffect(() => {
@@ -16,8 +18,6 @@ const Authors = ({ show }) => {
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
-  const [year, setYear] = useState("");
-  const [selectedOption, setSelectedOption] = useState();
 
   const submit = (e) => {
     e.preventDefault();
