@@ -3,7 +3,7 @@ interface BmiValues {
   weight: number;
 }
 
-const calculateBmi = (bmiValues: BmiValues): string => {
+export const calculateBmi = (bmiValues: BmiValues): string => {
   let { height, weight } = bmiValues;
 
   let mHeight = height / 100;
@@ -25,9 +25,10 @@ const calculateBmi = (bmiValues: BmiValues): string => {
   } else if (bmi >= 40) {
     return "Obese Class III (Very severely obese)";
   }
+  return 'an error occured. Please try again'
 };
 
-const parseArgumentsForBMI = (args: Array<string>): BmiValues => {
+export const parseArgumentsForBMI = (args: Array<string>): BmiValues => {
   if (args.length < 4) throw new Error("not enough arugments");
   if (args.length > 6) throw new Error("too many arugments");
 
@@ -44,9 +45,10 @@ const parseArgumentsForBMI = (args: Array<string>): BmiValues => {
   }
 };
 
-try {
-  const bmiValues: BmiValues = parseArgumentsForBMI(process.argv);
-  console.log(calculateBmi(bmiValues));
-} catch (e) {
-  console.log("error occurend", e.message);
-}
+// try {
+//   console.log('hello why areyou')
+//   const bmiValues: BmiValues = parseArgumentsForBMI(process.argv);
+//   console.log(calculateBmi(bmiValues));
+// } catch (e) {
+//   console.log("error occurend", e.message);
+// }
