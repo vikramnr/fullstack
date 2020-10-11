@@ -13,13 +13,13 @@ interface ExerciseValues {
   target: number;
 }
 
-export const parseArgumentsForCalculator = (
-  args: Array<string>
-): ExerciseValues => {
-  if (args.length < 4) throw new Error("not enough arugments");
-  if (args.length > 12) throw new Error("too many arugments");
+export function parseArgumentsForCalculator(args: Array<string>): ExerciseValues {
+  if (args.length < 4)
+    throw new Error("not enough arugments");
+  if (args.length > 12)
+    throw new Error("too many arugments");
 
-  let exerciseValues: Array<number> = [...args.slice(2)].map(Number);
+  const exerciseValues: Array<number> = [...args.slice(2)].map(Number);
 
   if (exerciseValues.every((n) => !isNaN(n)) && exerciseValues.length === 10) {
     if (exerciseValues.length === 10) {
@@ -28,15 +28,16 @@ export const parseArgumentsForCalculator = (
         target: exerciseValues[0],
       };
     } else {
-        throw new Error('arugments should be of type number... please check your input and try againg')
+      throw new Error('arugments should be of type number... please check your input and try againg');
     }
   }
-};
+  throw new Error('Some error has occured.. please check');
+}
 
-const calculateExercises = (exerciseValues: ExerciseValues): Result => {
-  let { training, target } = exerciseValues;
-  let trainedDays = training.filter((n) => n >= target);
-  let rating = Math.ceil(training.reduce((a, r) => a + r, 0) / 7);
+export const calculateExercises = (exerciseValues: ExerciseValues): Result => {
+  const { training, target } = exerciseValues;
+  const trainedDays = training.filter((n) => n >= target);
+  const rating = Math.ceil(training.reduce((a, r) => a + r, 0) / 7);
   const ratingMapping: { [key: number]: string } = {
     1: "good days are ahead, keep training",
     2: "not too bad but could be better",
@@ -56,11 +57,11 @@ const calculateExercises = (exerciseValues: ExerciseValues): Result => {
   };
 };
 
-try {
-  let exerciseValues: ExerciseValues = parseArgumentsForCalculator(
-    process.argv
-  );
-  console.log(calculateExercises(exerciseValues));
-} catch (e) {
-  console.log("error occurend", e.message);
-}
+// try {
+//   const exerciseValues: ExerciseValues = parseArgumentsForCalculator(
+//     process.argv
+//   );
+//   console.log(calculateExercises(exerciseValues));
+// } catch (e) {
+//   console.log("error occurend", e.message);
+// }

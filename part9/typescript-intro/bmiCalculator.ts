@@ -4,10 +4,10 @@ interface BmiValues {
 }
 
 export const calculateBmi = (bmiValues: BmiValues): string => {
-  let { height, weight } = bmiValues;
+  const { height, weight } = bmiValues;
 
-  let mHeight = height / 100;
-  let bmi = weight / (mHeight * mHeight);
+  const mHeight = height / 100;
+  const bmi = weight / (mHeight * mHeight);
   if (bmi < 15) {
     return "Very severely underweight";
   } else if (bmi < 16 && bmi >= 15) {
@@ -25,15 +25,15 @@ export const calculateBmi = (bmiValues: BmiValues): string => {
   } else if (bmi >= 40) {
     return "Obese Class III (Very severely obese)";
   }
-  return 'an error occured. Please try again'
+  return 'an error occured. Please try again';
 };
 
 export const parseArgumentsForBMI = (args: Array<string>): BmiValues => {
   if (args.length < 4) throw new Error("not enough arugments");
   if (args.length > 6) throw new Error("too many arugments");
 
-  let argsValue1: number = Number(args[2]);
-  let argsValue2: number = Number(args[3]);
+  const argsValue1 = Number(args[2]);
+  const argsValue2 = Number(args[3]);
 
   if (!isNaN(argsValue1) && !isNaN(argsValue2)) {
     return {
@@ -41,7 +41,7 @@ export const parseArgumentsForBMI = (args: Array<string>): BmiValues => {
       weight: argsValue2,
     };
   } else {
-      throw new Error('arugment should of type number.. Please check your input and try again')
+      throw new Error('arugment should of type number.. Please check your input and try again');
   }
 };
 
